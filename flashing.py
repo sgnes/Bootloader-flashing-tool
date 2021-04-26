@@ -11,6 +11,7 @@ import binascii
 import logging
 import os
 import json
+from udsoncan import Request, MemoryLocation
 
 def setup_logging(default_path='logging.json', default_level=logging.INFO, env_key='LOG_CFG'):
    """Setup logging configuration
@@ -36,15 +37,12 @@ bus = PcanBus()                                          # Link Layer (CAN proto
 tp_addr = isotp.Address(isotp.AddressingMode.Normal_11bits, txid=0x71d, rxid=0x71e) # Network layer addressing scheme
 stack = isotp.CanStack(bus=bus, address=tp_addr, params=isotp_params)               # Network/Transport layer (IsoTP protocol)
 conn = PythonIsoTpConnection(stack)                                                 # interface between Application and Transport layer
+seq = 1
 with Client(conn, request_timeout=5, config=client_config) as client:                                     # Application layer (UDS protocol)
    response = client.change_session(3)
-   print(response)
-   print(binascii.hexlify(response.data))
-   # Application layer (UDS protocol)
    response = client.change_session(2)
-   print(response)
-   print(binascii.hexlify(response.data))
    response = client.unlock_security_access(0x11)
-   print(response)
-   response = client.start_routine(1, bytes([0]))
-   print(response)
+   response = client.start_routine(0xff00, bytes([1, 0]))
+   memloc1 = MemoryLocation(address=0x4c00, memorysize=0x7000, address_format=24, memorysize_format=24)
+   response = client.request_download(memloc1)
+   response = client.transfer_data()
