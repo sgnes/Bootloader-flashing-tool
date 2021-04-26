@@ -13,7 +13,7 @@ import os
 import json
 from udsoncan import Request, MemoryLocation
 
-def setup_logging(default_path='logging.json', default_level=logging.INFO, env_key='LOG_CFG'):
+def setup_logging(default_path='logging.json', default_level=logging.DEBUG, env_key='LOG_CFG'):
    """Setup logging configuration
    """
    path = default_path
@@ -38,6 +38,8 @@ tp_addr = isotp.Address(isotp.AddressingMode.Normal_11bits, txid=0x71d, rxid=0x7
 stack = isotp.CanStack(bus=bus, address=tp_addr, params=isotp_params)               # Network/Transport layer (IsoTP protocol)
 conn = PythonIsoTpConnection(stack)                                                 # interface between Application and Transport layer
 seq = 1
+transfer_cnt = 0
+max_data_per_seq = 0x200
 with Client(conn, request_timeout=5, config=client_config) as client:                                     # Application layer (UDS protocol)
    response = client.change_session(3)
    response = client.change_session(2)
