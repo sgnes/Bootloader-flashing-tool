@@ -50,18 +50,7 @@ def security_algo(level, seed):
             type:bytes
     """
     numShift_u8 = 0
-    dshift = 20
-    Mask = 0x11223344
-    Seed_u32 = (int)((int(seed[0:2],16) << 24) & 0xFF000000)+(int)((int(seed[2:4],16) << 16) & 0x00FF0000) +(int)((int(seed[4:6],16) << 8) & 0x0000FF00) + (int)(int(seed[6:8],16) & 0x000000FF)
-    Key_u32 = Seed_u32
-    numShift_u8 = dshift
-    while(numShift_u8 > 0):
-        if (0 != Key_u32 & 0x80000000):
-            Key_u32 = (Key_u32 << 1) ^ Mask
-        else:
-            Key_u32 <<= 1
-        numShift_u8 -= 1
-    return (Key_u32&0xffffffff).to_bytes(4, byteorder='big')
+    return bytes([0xaa,0xaa,0xaa,0xaa])
 
 
 client_config  = {
@@ -81,5 +70,9 @@ client_config  = {
                                      0xFE01:MyCustomCodecHex,
                                      0xDF00:MyCustomCodecHex,
                                      0xd472:MyCustomCodecHex},
-	'input_output' 				: {}
+	'input_output' 				: {},
+    'p2_timeout' :0.5,
+    'p2_server_max':5,
+    'request_timeout':5,
+    'p2_star_timeout':5
 }
