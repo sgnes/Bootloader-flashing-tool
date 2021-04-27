@@ -39,7 +39,7 @@ stack = isotp.CanStack(bus=bus, address=tp_addr, params=isotp_params)           
 conn = PythonIsoTpConnection(stack)                                                 # interface between Application and Transport layer
 seq = 1
 transfer_cnt = 0
-max_data_per_seq = 0x200
+max_data_per_seq = 0x100
 with Client(conn, request_timeout=5, config=client_config) as client:                                     # Application layer (UDS protocol)
    response = client.change_session(3)
    response = client.change_session(2)
@@ -47,4 +47,19 @@ with Client(conn, request_timeout=5, config=client_config) as client:           
    response = client.start_routine(0xff00, bytes([1, 0]))
    memloc1 = MemoryLocation(address=0x4c00, memorysize=0x7000, address_format=24, memorysize_format=24)
    response = client.request_download(memloc1)
-   response = client.transfer_data()
+   current_addr = 0x4c00
+   while transfer_cnt < 0x7000:
+      cnt = min(max_data_per_seq, 0x7000-transfer_cnt)
+      data = src.get_data_by_addr(current_addr, cnt)
+      response = client.transfer_data(seq,  bytes.fromhex(data))
+      seq += 1
+      current_addr += cnt
+      transfer_cnt +=  cnt
+
+   client.request_transfer_exit()
+   response = client.start_routine(0x0202, bytes([3, 0, 0x4c, 0]))
+   print(binascii.hexlify(response.data))
+   response = client.start_routine(0xff01)
+   print(binascii.hexlify(response.data))
+   response = client.ecu_reset(1)
+   print(binascii.hexlify(response.data))
