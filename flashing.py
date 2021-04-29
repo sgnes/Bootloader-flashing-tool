@@ -1,6 +1,6 @@
 from pysrc import Srecords
 from udsoncan import client
-from can.interfaces.pcan import PcanBus
+from can.interfaces.vector import VectorBus
 from udsoncan.connections import PythonIsoTpConnection
 from udsoncan.client import Client
 import isotp
@@ -55,7 +55,7 @@ src = Srecords("MASTER_A003.hex")
 #print(src.get_data_by_addr(0x4c00, 0x7000))
 
 
-bus = PcanBus()                                          # Link Layer (CAN protocol)
+bus = VectorBus(0)  # Link Layer (CAN protocol)
 tp_addr = isotp.Address(isotp.AddressingMode.Normal_11bits, txid=project_config.uds_req_phy_id, rxid=project_config.uds_res_id) # Network layer addressing scheme
 stack = isotp.CanStack(bus=bus, address=tp_addr, params=isotp_params)               # Network/Transport layer (IsoTP protocol)
 conn = PythonIsoTpConnection(stack)                                                 # interface between Application and Transport layer
