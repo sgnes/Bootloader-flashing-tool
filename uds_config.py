@@ -76,3 +76,10 @@ client_config  = {
     'request_timeout':5,
     'p2_star_timeout':5
 }
+
+class project_config():
+    uds_req_phy_id = 0x71d
+    uds_req_fun_id = 0x7df
+    uds_res_id = 0x71e
+    app_start_addr = 0x4c00
+    app_size = 0x7000
