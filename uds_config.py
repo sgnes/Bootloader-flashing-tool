@@ -74,7 +74,9 @@ client_config  = {
     'p2_timeout' :0.5,
     'p2_server_max':5,
     'request_timeout':5,
-    'p2_star_timeout':5
+    'p2_star_timeout':5,
+    'use_server_timing': False
+
 }
 
 class project_config():
