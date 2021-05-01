@@ -110,5 +110,6 @@ if __name__ == '__main__':
    tp_addr = isotp.Address(isotp.AddressingMode.Normal_11bits, txid=project_config.uds_req_phy_id,
                            rxid=project_config.uds_res_id)  # Network layer addressing scheme
    stack = isotp.CanStack(bus=bus, address=tp_addr, params=isotp_params)  # Network/Transport layer (IsoTP protocol)
+   stack.set_sleep_timing(0.001, 0.001)
    conn = PythonIsoTpConnection(stack)
    reprogramming(conn, args)
