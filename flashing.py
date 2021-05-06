@@ -99,7 +99,7 @@ if __name__ == '__main__':
    parser.add_argument('--baud_rate', type=int, default=500, help='CAN baud rate.')
    parser.add_argument('--file', type=str, default="MASTER_A003.hex", help='The file to be reprogrammed')
    parser.add_argument('--app_start_addr', type=int, default=0x4c00, help='The start address of app')
-   parser.add_argument('--app_size', type=int, default=0x700, help='The size of app')
+   parser.add_argument('--app_size', type=int, default=0x7000, help='The size of app')
 
    args = parser.parse_args()
 
