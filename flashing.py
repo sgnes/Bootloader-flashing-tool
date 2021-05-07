@@ -13,6 +13,7 @@ import os
 import json
 from udsoncan import Request, MemoryLocation
 import argparse
+import time
 
 
 def setup_logging(default_path='logging.json', default_level=logging.DEBUG, env_key='LOG_CFG'):
@@ -122,9 +123,14 @@ if __name__ == '__main__':
    conn = PythonIsoTpConnection(stack)
    reprogramming(conn, args)
 
+   start = time.time()
+   max_limit=5 #5s timeout
    for msg in bus:
       if msg.arbitration_id == 0x664:
          print ("The current SW version is:")
          swversion=msg.data[7:5:-1]
          print(binascii.hexlify(swversion))
+         exit(0)
+      if time.time() - start > max_limit:
+         print("Fail, No APP msg received, Can not read out SW version")
          exit(0)
