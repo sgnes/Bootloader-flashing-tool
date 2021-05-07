@@ -86,10 +86,18 @@ def reprogramming(conn, args):
       client.request_transfer_exit()
       response = client.start_routine(0x0202, bytes([3, 0, 0x4c, 0]))
       print(binascii.hexlify(response.data))
-      response = client.start_routine(0xff01)
-      print(binascii.hexlify(response.data))
+      if response.data[3]!=0x00:
+         testresult = "Flash Failed"
+      else:
+         response = client.start_routine(0xff01)
+         print(binascii.hexlify(response.data))
+         if response.data[3] != 0x01:
+            testresult = "Flash Failed"
+         else:
+            testresult = "Flash Success"
       response = client.ecu_reset(1)
       print(binascii.hexlify(response.data))
+      print(testresult)
 
 if __name__ == '__main__':
    parser = argparse.ArgumentParser(description='test')
@@ -113,3 +121,10 @@ if __name__ == '__main__':
    stack.set_sleep_timing(0.001, 0.001)
    conn = PythonIsoTpConnection(stack)
    reprogramming(conn, args)
+
+   for msg in bus:
+      if msg.arbitration_id == 0x664:
+         print ("The current SW version is:")
+         swversion=msg.data[7:5:-1]
+         print(binascii.hexlify(swversion))
+         exit(0)
