@@ -71,7 +71,7 @@ client_config  = {
                                      0xDF00:MyCustomCodecHex,
                                      0xd472:MyCustomCodecHex},
 	'input_output' 				: {},
-    #'use_server_timing': False, if still has timeout issue, can enable this one, and will use below parameters, not use the server timing.
+    'use_server_timing': False,# if still has timeout issue, can enable this one, and will use below parameters, not use the server timing.
     'p2_timeout' :0.5,
     'p2_server_max':5,
     'request_timeout':5,

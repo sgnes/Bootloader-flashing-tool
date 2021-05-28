@@ -14,7 +14,7 @@ import json
 from udsoncan import Request, MemoryLocation
 import argparse
 import time
-
+import can
 
 def setup_logging(default_path='logging.json', default_level=logging.DEBUG, env_key='LOG_CFG'):
    """Setup logging configuration
@@ -116,6 +116,8 @@ if __name__ == '__main__':
       bus = VectorBus(args.can_channel)
    elif args.can_interface == "PCAN":
       bus = PcanBus()  # Link Layer (CAN protocol)
+   elif args.can_interface == 'socketcan':
+      bus = can.interface.Bus(channel = 'can{}'.format(args.can_channel), bustype = 'socketcan_ctypes')
    tp_addr = isotp.Address(isotp.AddressingMode.Normal_11bits, txid=project_config.uds_req_phy_id,
                            rxid=project_config.uds_res_id)  # Network layer addressing scheme
    stack = isotp.CanStack(bus=bus, address=tp_addr, params=isotp_params)  # Network/Transport layer (IsoTP protocol)
