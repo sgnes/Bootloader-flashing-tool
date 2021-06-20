@@ -103,7 +103,7 @@ def reprogramming(conn, args):
 if __name__ == '__main__':
    parser = argparse.ArgumentParser(description='test')
 
-   parser.add_argument('--can_interface', default='Vector', help='The CAN interface used for programming, PCAN, Vector...')
+   parser.add_argument('--can_interface', default='PCAN', help='The CAN interface used for programming, PCAN, Vector...')
    parser.add_argument('--can_channel', default=0, help='The CAN interface channel used for programming, 0,1.')
    parser.add_argument('--baud_rate', type=int, default=500, help='CAN baud rate.')
    parser.add_argument('--file', type=str, default="MASTER.srec", help='The file to be reprogrammed')
