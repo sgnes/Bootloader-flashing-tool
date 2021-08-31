@@ -14,6 +14,7 @@ import json
 from udsoncan import Request, MemoryLocation
 import argparse
 import time
+import sys
 
 
 def setup_logging(default_path='logging.json', default_level=logging.DEBUG, env_key='LOG_CFG'):
@@ -130,7 +131,7 @@ if __name__ == '__main__':
          print ("The current SW version is:")
          swversion=msg.data[7:5:-1]
          print(binascii.hexlify(swversion))
-         exit(0)
+         sys.exit(0)
       if time.time() - start > max_limit:
          print("Fail, No APP msg received, Can not read out SW version")
-         exit(0)
+         sys.exit(0)
